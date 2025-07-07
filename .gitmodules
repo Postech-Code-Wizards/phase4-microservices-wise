@@ -1,0 +1,15 @@
+[submodule "wise-stock-service"]
+	path = wise-stock-service
+	url = https://github.com/Postech-Code-Wizards/wise-stock-service
+[submodule "wise-order-receiver"]
+	path = wise-order-receiver
+	url = https://github.com/Postech-Code-Wizards/wise-order-receiver
+[submodule "wise-product-service"]
+	path = wise-product-service
+	url = https://github.com/Postech-Code-Wizards/wise-product-service
+[submodule "wise-client-service"]
+	path = wise-client-service
+	url = https://github.com/Postech-Code-Wizards/wise-client-service
+[submodule "wise-order-service"]
+	path = wise-order-service
+	url = https://github.com/Postech-Code-Wizards/wise-order-service
