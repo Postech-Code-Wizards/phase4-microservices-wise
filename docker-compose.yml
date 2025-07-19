@@ -32,7 +32,7 @@ services:
   wise-client-service:
     build:
       context: ./wise-client-service
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
     container_name: wise-client-service
     depends_on:
       - postgres
@@ -45,7 +45,7 @@ services:
   wise-order-service:
     build:
       context: ./wise-order-service
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
     container_name: wise-order-service
     depends_on:
       - postgres
@@ -58,7 +58,7 @@ services:
   wise-product-service:
     build:
       context: ./wise-product-service
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
     container_name: wise-product-service
     depends_on:
       - postgres
@@ -78,7 +78,7 @@ services:
   wise-order-receiver:
     build:
       context: ./wise-order-receiver
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
     container_name: wise-order-receiver
     depends_on:
       - rabbitmq
@@ -90,7 +90,7 @@ services:
   wise-payment:
     build:
       context: ./wise-payment
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
     container_name: wise-payment
     depends_on:
       - postgres
@@ -103,7 +103,7 @@ services:
   wise-stock-service:
     build:
       context: ./wise-stock-service
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
     container_name: wise-stock-service
     depends_on:
       - postgres
