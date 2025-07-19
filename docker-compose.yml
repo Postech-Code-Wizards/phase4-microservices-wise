@@ -1,0 +1,114 @@
+version: '3.8'
+
+networks:
+  wise_network:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: wise-postgres
+    environment:
+      POSTGRES_DB: wise
+      POSTGRES_USER: wise
+      POSTGRES_PASSWORD: wise
+    ports:
+      - "5432:5432"
+    networks:
+      - wise_network
+
+  rabbitmq:
+    image: rabbitmq:3.11-management-alpine
+    container_name: wise-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: wise
+      RABBITMQ_DEFAULT_PASS: admin
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - wise_network
+
+  wise-client-service:
+    build:
+      context: ./wise-client-service
+      dockerfile: Dockerfile
+    container_name: wise-client-service
+    depends_on:
+      - postgres
+      - rabbitmq
+    ports:
+      - "8081:8080"
+    networks:
+      - wise_network
+
+  wise-order-service:
+    build:
+      context: ./wise-order-service
+      dockerfile: Dockerfile
+    container_name: wise-order-service
+    depends_on:
+      - postgres
+      - rabbitmq
+    ports:
+      - "8082:8080"
+    networks:
+      - wise_network
+
+  wise-product-service:
+    build:
+      context: ./wise-product-service
+      dockerfile: Dockerfile
+    container_name: wise-product-service
+    depends_on:
+      - postgres
+    ports:
+      - "8083:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://wise-postgres:5432/wise
+      SPRING_DATASOURCE_USERNAME: wise
+      SPRING_DATASOURCE_PASSWORD: wise
+      SPRING_RABBITMQ_HOST: wise-rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: wise
+      SPRING_RABBITMQ_PASSWORD: admin
+    networks:
+      - wise_network
+
+  wise-order-receiver:
+    build:
+      context: ./wise-order-receiver
+      dockerfile: Dockerfile
+    container_name: wise-order-receiver
+    depends_on:
+      - rabbitmq
+    ports:
+      - "8084:8080"
+    networks:
+      - wise_network
+
+  wise-payment:
+    build:
+      context: ./wise-payment
+      dockerfile: Dockerfile
+    container_name: wise-payment
+    depends_on:
+      - postgres
+      - rabbitmq
+    ports:
+      - "8085:8080"
+    networks:
+      - wise_network
+
+  wise-stock-service:
+    build:
+      context: ./wise-stock-service
+      dockerfile: Dockerfile
+    container_name: wise-stock-service
+    depends_on:
+      - postgres
+      - rabbitmq
+    ports:
+      - "8086:8080"
+    networks:
+      - wise_network
