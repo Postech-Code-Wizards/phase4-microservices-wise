@@ -16,6 +16,11 @@ services:
       - "5433:5432"
     networks:
       - wise_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d clientdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   postgres_order:
     image: postgres:15
@@ -28,6 +33,11 @@ services:
       - "5434:5432"
     networks:
       - wise_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d wise"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   postgres_product:
     image: postgres:15
@@ -40,6 +50,11 @@ services:
       - "5432:5432"
     networks:
       - wise_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d wiseCommerceProduct"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   postgres_stock:
     image: postgres:15
@@ -52,6 +67,11 @@ services:
       - "5435:5432"
     networks:
       - wise_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d stock_service"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   rabbitmq:
     image: rabbitmq:3.11-management-alpine
@@ -64,6 +84,11 @@ services:
       - "15672:15672"
     networks:
       - wise_network
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
 
   wise-client-service:
     build:
@@ -71,12 +96,15 @@ services:
       dockerfile: ./Dockerfile
     container_name: wise-client-service
     depends_on:
-      - postgres_client
-      - rabbitmq
+      postgres_client:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     ports:
       - "8081:8080"
     networks:
       - wise_network
+    restart: unless-stopped
 
   wise-order-service:
     build:
@@ -84,12 +112,15 @@ services:
       dockerfile: ./Dockerfile
     container_name: wise-order-service
     depends_on:
-      - postgres_order
-      - rabbitmq
+      postgres_order:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     ports:
       - "8082:8080"
     networks:
       - wise_network
+    restart: unless-stopped
 
   wise-product-service:
     build:
@@ -97,19 +128,15 @@ services:
       dockerfile: ./Dockerfile
     container_name: wise-product-service
     depends_on:
-      - postgres_product
+      postgres_product:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     ports:
       - "8089:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://wise-postgres:5432/wiseCommerceProduct
-      SPRING_DATASOURCE_USERNAME: wise
-      SPRING_DATASOURCE_PASSWORD: wise
-      SPRING_RABBITMQ_HOST: wise-rabbitmq
-      SPRING_RABBITMQ_PORT: 5672
-      SPRING_RABBITMQ_USERNAME: wise
-      SPRING_RABBITMQ_PASSWORD: admin
     networks:
       - wise_network
+    restart: unless-stopped
 
   wise-order-receiver:
     build:
@@ -117,11 +144,13 @@ services:
       dockerfile: ./Dockerfile
     container_name: wise-order-receiver
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     ports:
       - "8084:8080"
     networks:
       - wise_network
+    restart: unless-stopped
 
   wise-payment:
     build:
@@ -129,11 +158,13 @@ services:
       dockerfile: ./Dockerfile
     container_name: wise-payment
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     ports:
       - "8085:8080"
     networks:
       - wise_network
+    restart: unless-stopped
 
   wise-stock-service:
     build:
@@ -141,9 +172,12 @@ services:
       dockerfile: Dockerfile
     container_name: wise-stock-service
     depends_on:
-      - postgres_stock
-      - rabbitmq
+      postgres_stock:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     ports:
       - "8088:8080"
     networks:
       - wise_network
+    restart: unless-stopped
