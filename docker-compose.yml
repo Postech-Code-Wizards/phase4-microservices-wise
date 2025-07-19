@@ -5,15 +5,51 @@ networks:
     driver: bridge
 
 services:
-  postgres:
+  postgres_client:
     image: postgres:15
-    container_name: wise-postgres
+    container_name: wise-postgres_client
+    environment:
+      POSTGRES_DB: clientdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    networks:
+      - wise_network
+
+  postgres_order:
+    image: postgres:15
+    container_name: wise-postgres_order
     environment:
       POSTGRES_DB: wise
-      POSTGRES_USER: wise
-      POSTGRES_PASSWORD: wise
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5434:5432"
+    networks:
+      - wise_network
+
+  postgres_product:
+    image: postgres:15
+    container_name: wise-postgres_product
+    environment:
+      POSTGRES_DB: wiseCommerceProduct
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
     ports:
       - "5432:5432"
+    networks:
+      - wise_network
+
+  postgres_stock:
+    image: postgres:15
+    container_name: wise-postgres_stock
+    environment:
+      POSTGRES_DB: stock_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5435:5432"
     networks:
       - wise_network
 
@@ -35,7 +71,7 @@ services:
       dockerfile: ./Dockerfile
     container_name: wise-client-service
     depends_on:
-      - postgres
+      - postgres_client
       - rabbitmq
     ports:
       - "8081:8080"
@@ -48,7 +84,7 @@ services:
       dockerfile: ./Dockerfile
     container_name: wise-order-service
     depends_on:
-      - postgres
+      - postgres_order
       - rabbitmq
     ports:
       - "8082:8080"
@@ -61,11 +97,11 @@ services:
       dockerfile: ./Dockerfile
     container_name: wise-product-service
     depends_on:
-      - postgres
+      - postgres_product
     ports:
       - "8089:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://wise-postgres:5432/wise
+      SPRING_DATASOURCE_URL: jdbc:postgresql://wise-postgres:5432/wiseCommerceProduct
       SPRING_DATASOURCE_USERNAME: wise
       SPRING_DATASOURCE_PASSWORD: wise
       SPRING_RABBITMQ_HOST: wise-rabbitmq
@@ -93,7 +129,6 @@ services:
       dockerfile: ./Dockerfile
     container_name: wise-payment
     depends_on:
-      - postgres
       - rabbitmq
     ports:
       - "8085:8080"
@@ -106,7 +141,7 @@ services:
       dockerfile: Dockerfile
     container_name: wise-stock-service
     depends_on:
-      - postgres
+      - postgres_stock
       - rabbitmq
     ports:
       - "8088:8080"
