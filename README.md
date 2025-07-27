@@ -33,15 +33,20 @@ O projeto é composto pelos seguintes serviços:
 
 ## ▶️ Como rodar o projeto
 
-1. Clone o repositório com submódulos:
+1. Clone o repositório:
    ```bash
-   git clone --recurse-submodules https://github.com/SEU_USUARIO/phase4-microservices-wise.git
-   ```
-2. Suba todos os serviços com Docker:
+   git clone https://github.com/Postech-Code-Wizards/phase4-microservices-wise.git
+   cd phase4-microservices-wise
+    ```
+2. Atualize os submódulos:
+   ```bash
+   git submodule update --init --recursive
+    ```
+3. Suba todos os serviços com Docker:
    ```bash
    docker compose up --build
    ```
-3. Acesse os serviços nas portas configuradas no docker-compose.yml através da Coleção do Postman
+4. Acesse os serviços nas portas configuradas no `docker-compose.yml`, utilizando a [coleção do Postman](https://postech-code-wizards.postman.co/workspace/FoodWise-Backend~6e8c7ccc-d1f8-42e7-bd4d-899bd31909e7/collection/39830207-535c2390-f87a-47b1-a52e-acafc25e4169?action=share&creator=39830207) para testar os endpoints.
    
 ---
 
