@@ -1,6 +1,17 @@
 # 🧠 Phase 4 - Wise Microservices
 
 Este repositório contém o projeto final da Fase 4 do Pós-Tech em Arquitetura de Software, que implementa uma arquitetura de microsserviços para gerenciamento de pedidos em um ambiente distribuído, utilizando Docker, Quarkus e mensageria com RabbitMQ.
+---
+## 📚 Índice
+
+- [📦 Microserviços](#-microserviços)
+- [🚀 Tecnologias Utilizadas](#-tecnologias-utilizadas)
+- [▶️ Como rodar o projeto](#️-como-rodar-o-projeto)
+- [🧪 Executando os testes e cobertura com JaCoCo](#-executando-os-testes-e-cobertura-com-jacoco)
+  - [✅ Rodando os testes](#-rodando-os-testes)
+  - [⚠️ Observação sobre o wise-client-service (Quarkus)](#-rodando-os-testes)
+- [👥 Equipe](#-equipe)
+- [🎥 Demonstração](#-demonstração)
 
 ---
 
