@@ -53,13 +53,14 @@ O projeto é composto pelos seguintes serviços:
 ## 🧪 Executando os testes e cobertura com JaCoCo
 
 Cada microserviço possui testes com cobertura via **JaCoCo**.
+Nesse repositório está uma pasta com todos os arquivos.
 
 ### ✅ Rodando os testes
 
-Para gerar o relatório de cobertura de testes em um dos serviços (exemplo: `wise-client-service`):
+Para gerar o relatório de cobertura de testes em um dos serviços (exemplo: `wise-order-service`):
 
 ```bash
-cd wise-client-service
+cd wise-order-service
 ./mvnw clean verify
 ```
 
@@ -68,6 +69,20 @@ O relatório será gerado em:
 ```bash
 target/site/jacoco/index.html
 ```
+
+⚠️ O microserviço wise-client-service utiliza Quarkus, por isso configuramos comando diferente para gerar corretamente os relatórios de cobertura de testes incluindo o Controller.
+
+Para esse serviço, utilize:
+
+```bash
+./mvnw clean test jacoco:report
+```
+
+O relatório será gerado em:
+```bash
+target/jacoco-report/index.html
+```
+
 Abra este arquivo no seu navegador para visualizar a cobertura de código! 💡
 
 ---
