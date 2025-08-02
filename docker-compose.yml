@@ -73,6 +73,23 @@ services:
       timeout: 5s
       retries: 5
 
+  postgres_payment:
+    image: postgres:15
+    container_name: wise-postgres_payment
+    environment:
+      POSTGRES_DB: stock_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5436:5432"
+    networks:
+      - wise_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d stock_service" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   rabbitmq:
     image: rabbitmq:3.11-management-alpine
     container_name: wise-rabbitmq
@@ -158,6 +175,8 @@ services:
       dockerfile: ./Dockerfile
     container_name: wise-payment
     depends_on:
+      postgres_payment:
+        condition: service_healthy
       rabbitmq:
         condition: service_healthy
     ports:
