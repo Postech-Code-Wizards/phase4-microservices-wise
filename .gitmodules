@@ -19,5 +19,6 @@
 	url = https://github.com/Postech-Code-Wizards/wise-order-service
 	branch = main
 [submodule "wise-payment"]
-    path = wise-payment
-    url = https://github.com/Postech-Code-Wizards/wise-payment
+    	path = wise-payment
+    	url = https://github.com/Postech-Code-Wizards/wise-payment
+	branch = main
