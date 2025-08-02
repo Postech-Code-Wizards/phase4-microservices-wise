@@ -13,6 +13,4 @@
 [submodule "wise-order-service"]
 	path = wise-order-service
 	url = https://github.com/Postech-Code-Wizards/wise-order-service
-[submodule "wise-payment"]
-	path = wise-payment
-	url = https://github.com/Postech-Code-Wizards/wise-payment
+
